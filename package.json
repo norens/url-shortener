@@ -1,0 +1,16 @@
+{
+  "name": "qurl",
+  "private": true,
+  "scripts": {
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev": "pnpm run --parallel dev:api dev:web",
+    "build": "pnpm run --parallel build:api build:web",
+    "build:api": "pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

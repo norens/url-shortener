@@ -1,0 +1,11 @@
+name = "qurl-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+
+# [env.production]
+# vars = { ENVIRONMENT = "production" }
+# routes = [{ pattern = "api.qurl.nazarf.dev", custom_domain = true }]
