@@ -5,6 +5,7 @@ import { createSupabaseClient } from "../lib/supabase";
 import { createRedisClient, setCachedUrl } from "../lib/redis";
 import { generateShortCode } from "../lib/codegen";
 import { shortenSchema } from "../lib/validation";
+import { checkRateLimit } from "../lib/ratelimit";
 import { MAX_COLLISION_RETRIES, SHORT_URL_BASE } from "@qurl/shared";
 
 const shorten = new Hono<{
@@ -24,6 +25,15 @@ shorten.post("/api/shorten", zValidator("json", shortenSchema), async (c) => {
     c.env.UPSTASH_REDIS_REST_URL,
     c.env.UPSTASH_REDIS_REST_TOKEN
   );
+
+  // Per-user rate limit: 20 requests per hour
+  const rl = await checkRateLimit(redis, userId, 20, 3600);
+  if (!rl.allowed) {
+    return c.json(
+      { error: "Rate limit exceeded. Try again in an hour." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } }
+    );
+  }
 
   // Check user's link count against limit
   const { count } = await supabase

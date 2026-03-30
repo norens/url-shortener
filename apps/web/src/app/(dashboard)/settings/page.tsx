@@ -3,10 +3,19 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { apiGet } from "@/lib/api";
+import { Heart } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
+
+interface MeResponse {
+  plan: string;
+  links_count: number;
+  links_limit: number;
+}
 
 export default function SettingsPage() {
   const [user, setUser] = useState<User | null>(null);
+  const [me, setMe] = useState<MeResponse | null>(null);
   const supabase = createClient();
   const router = useRouter();
 
@@ -14,6 +23,7 @@ export default function SettingsPage() {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
     });
+    apiGet<MeResponse>("/api/me").then(setMe).catch(() => {});
   }, []);
 
   async function handleLogout() {
@@ -21,6 +31,10 @@ export default function SettingsPage() {
     router.push("/login");
     router.refresh();
   }
+
+  const linksCount = me?.links_count ?? 0;
+  const linksLimit = me?.links_limit ?? 25;
+  const usagePct = Math.round((linksCount / linksLimit) * 100);
 
   return (
     <div className="space-y-6">
@@ -53,16 +67,44 @@ export default function SettingsPage() {
       </div>
 
       <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-sm font-medium text-gray-900">Plan</h2>
-        <div className="mt-4">
-          <div className="flex items-center gap-3">
-            <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
-              Free
-            </span>
-            <span className="text-sm text-gray-500">25 links, basic analytics</span>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-medium text-gray-900">Plan</h2>
+          <span className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+            <Heart className="h-3.5 w-3.5" />
+            Free forever
+          </span>
+        </div>
+
+        <div className="mt-4 space-y-3">
+          <div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-600">Links used</span>
+              <span className="font-medium text-gray-900">
+                {me ? `${linksCount} / ${linksLimit}` : "Loading..."}
+              </span>
+            </div>
+            {me && (
+              <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                <div
+                  className="h-full rounded-full bg-blue-500 transition-all"
+                  style={{ width: `${Math.min(usagePct, 100)}%` }}
+                />
+              </div>
+            )}
           </div>
-          <p className="mt-3 text-sm text-gray-500">
-            Paid plans with more features coming soon.
+
+          <p className="text-sm text-gray-500">
+            Enjoying Qurl?{" "}
+            <a
+              href="https://github.com/sponsors/nazarfedisin"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-medium text-pink-600 hover:text-pink-700"
+            >
+              <Heart className="h-3 w-3" />
+              Sponsor on GitHub
+            </a>{" "}
+            to keep it running.
           </p>
         </div>
       </div>

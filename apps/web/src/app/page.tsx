@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Link2, BarChart3, Zap, QrCode } from "lucide-react";
+import { Link2, BarChart3, Zap, QrCode, Heart } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -19,7 +19,7 @@ export default function LandingPage() {
               href="/signup"
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
             >
-              Get Started Free
+              Start Free
             </Link>
           </div>
         </div>
@@ -28,20 +28,33 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 py-24 text-center">
         <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-          Shorten links.
+          Free URL shortener,
           <br />
-          <span className="text-blue-600">Track everything.</span>
+          <span className="text-blue-600">forever.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
-          Create short, memorable links with powerful analytics. See who clicks,
-          where they come from, and what devices they use — all in real time.
+          Create short, memorable links with powerful analytics. No credit card,
+          no hidden fees, no expiry — just shorten and share.
         </p>
+
+        {/* Stats row */}
+        <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500">
+          <span className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-green-500" />
+            100% free
+          </span>
+          <span className="text-gray-300">·</span>
+          <span>No credit card</span>
+          <span className="text-gray-300">·</span>
+          <span>Open source</span>
+        </div>
+
         <div className="mt-10 flex items-center justify-center gap-4">
           <Link
             href="/signup"
             className="rounded-lg bg-blue-600 px-6 py-3 text-base font-semibold text-white hover:bg-blue-700"
           >
-            Start for Free
+            Start Shortening — It&apos;s Free
           </Link>
           <Link
             href="/login"
@@ -56,10 +69,10 @@ export default function LandingPage() {
       <section className="border-t border-gray-100 bg-gray-50 py-24">
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-center text-3xl font-bold text-gray-900">
-            Everything you need
+            Everything you need, free
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-gray-600">
-            A complete URL management platform for individuals and teams.
+            All features included. No tiers, no limits that make you upgrade.
           </p>
 
           <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -88,8 +101,31 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Support section */}
+      <section className="border-t border-gray-100 py-20">
+        <div className="mx-auto max-w-2xl px-6 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-pink-50">
+            <Heart className="h-6 w-6 text-pink-500" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900">Support Qurl</h2>
+          <p className="mt-3 text-gray-600">
+            Qurl is free forever and open source. If it saves you time,
+            consider sponsoring development — it keeps the lights on.
+          </p>
+          <a
+            href="https://github.com/sponsors/nazarfedisin"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg border border-pink-200 bg-pink-50 px-6 py-2.5 text-sm font-semibold text-pink-700 hover:bg-pink-100"
+          >
+            <Heart className="h-4 w-4" />
+            Sponsor on GitHub
+          </a>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="py-24">
+      <section className="border-t border-gray-100 bg-gray-50 py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900">
             Ready to shorten your links?
@@ -110,7 +146,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-gray-100 py-8">
         <div className="mx-auto max-w-6xl px-6 text-center text-sm text-gray-500">
-          Qurl — URL Shortener
+          Qurl — Free URL Shortener · Open Source
         </div>
       </footer>
     </div>

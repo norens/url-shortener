@@ -15,6 +15,7 @@ export function CreateLinkDialog({ onCreated }: Props) {
   const [url, setUrl] = useState("");
   const [alias, setAlias] = useState("");
   const [title, setTitle] = useState("");
+  const [expiresAt, setExpiresAt] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -27,12 +28,14 @@ export function CreateLinkDialog({ onCreated }: Props) {
       const body: ShortenRequest = { long_url: url };
       if (alias) body.alias = alias;
       if (title) body.title = title;
+      if (expiresAt) body.expires_at = new Date(expiresAt).toISOString();
 
       await apiPost<ShortenResponse>("/api/shorten", body);
 
       setUrl("");
       setAlias("");
       setTitle("");
+      setExpiresAt("");
       setOpen(false);
       onCreated();
     } catch (err) {
@@ -81,20 +84,6 @@ export function CreateLinkDialog({ onCreated }: Props) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Custom alias (optional)
-              </label>
-              <input
-                type="text"
-                maxLength={7}
-                value={alias}
-                onChange={(e) => setAlias(e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                placeholder="my-link"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
                 Title (optional)
               </label>
               <input
@@ -105,6 +94,35 @@ export function CreateLinkDialog({ onCreated }: Props) {
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="My campaign link"
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Custom alias (optional)
+                </label>
+                <input
+                  type="text"
+                  maxLength={7}
+                  value={alias}
+                  onChange={(e) => setAlias(e.target.value)}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="my-link"
+                />
+                <p className="mt-1 text-xs text-gray-400">{alias.length}/7 characters</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Expires At (optional)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={expiresAt}
+                  onChange={(e) => setExpiresAt(e.target.value)}
+                  min={new Date().toISOString().slice(0, 16)}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-2">

@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import useSWR from "swr";
-import { ArrowLeft, Copy, Check, ExternalLink } from "lucide-react";
+import { ArrowLeft, Copy, Check, Clock } from "lucide-react";
 import Link from "next/link";
 import { useState, useCallback } from "react";
 import { apiGet } from "@/lib/api";
@@ -74,10 +74,30 @@ export default function LinkDetailPage({
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <div className="flex-1">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl font-bold text-gray-900">
               {link?.title ?? code}
             </h1>
+            <span
+              className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                link?.is_active
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {link?.is_active ? "Active" : "Inactive"}
+            </span>
+            {link?.expires_at && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+                <Clock className="h-3 w-3" />
+                Expires{" "}
+                {new Date(link.expires_at).toLocaleDateString("en", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+            )}
             <button
               onClick={handleCopy}
               className="flex items-center gap-1 rounded-md bg-gray-100 px-2.5 py-1 text-sm text-gray-600 hover:bg-gray-200"

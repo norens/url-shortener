@@ -6,12 +6,12 @@ import resolve from "./routes/resolve";
 import redirect from "./routes/redirect";
 import links from "./routes/links";
 import analytics from "./routes/analytics";
+import me from "./routes/me";
 import { authMiddleware } from "./middleware/auth";
 
 export type Env = {
   SUPABASE_URL: string;
   SUPABASE_SERVICE_ROLE_KEY: string;
-  SUPABASE_JWT_SECRET: string;
   UPSTASH_REDIS_REST_URL: string;
   UPSTASH_REDIS_REST_TOKEN: string;
   ENVIRONMENT: string;
@@ -39,12 +39,14 @@ app.use("/api/shorten", authMiddleware);
 app.use("/api/links/*", authMiddleware);
 app.use("/api/links", authMiddleware);
 app.use("/api/analytics/*", authMiddleware);
+app.use("/api/me", authMiddleware);
 
 // Routes
 app.route("/", shorten);
 app.route("/", resolve);
 app.route("/", links);
 app.route("/", analytics);
+app.route("/", me);
 
 // Redirect catch-all (must be last)
 app.route("/", redirect);
