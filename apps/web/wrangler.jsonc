@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "qurl-web",
+  "account_id": "21ab5232282fb7085a857b3a39f3bd99",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-05-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://ahfmzmamoxxduumjhhcf.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_VCzsZgkPGwEoQjE-CkM5ww_n6Kpqvic",
+    "NEXT_PUBLIC_API_URL": "https://api.qurl.nazarf.dev"
+  }
+}
