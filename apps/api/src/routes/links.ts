@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import type { Env } from "../index";
 import { createSupabaseClient } from "../lib/supabase";
-import { createRedisClient, deleteCachedUrl } from "../lib/redis";
+import { deleteCachedUrl } from "../lib/kv";
 import { updateLinkSchema } from "../lib/validation";
 import { SHORT_URL_BASE } from "@qurl/shared";
 
@@ -115,11 +115,7 @@ links.patch(
     }
 
     // Invalidate cache
-    const redis = createRedisClient(
-      c.env.UPSTASH_REDIS_REST_URL,
-      c.env.UPSTASH_REDIS_REST_TOKEN
-    );
-    c.executionCtx.waitUntil(deleteCachedUrl(redis, code));
+    c.executionCtx.waitUntil(deleteCachedUrl(c.env.URL_CACHE, code));
 
     return c.json(data);
   }
@@ -160,11 +156,7 @@ links.delete("/api/links/:code", async (c) => {
   }
 
   // Invalidate cache
-  const redis = createRedisClient(
-    c.env.UPSTASH_REDIS_REST_URL,
-    c.env.UPSTASH_REDIS_REST_TOKEN
-  );
-  c.executionCtx.waitUntil(deleteCachedUrl(redis, code));
+  c.executionCtx.waitUntil(deleteCachedUrl(c.env.URL_CACHE, code));
 
   return c.json({ success: true });
 });

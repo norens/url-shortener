@@ -1,11 +1,24 @@
 name = "qurl-api"
+account_id = "21ab5232282fb7085a857b3a39f3bd99"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
+ENVIRONMENT = "production"
+
+[[kv_namespaces]]
+binding = "URL_CACHE"
+id = "156b39cc51ad4e86b92d3f62d36a9f32"
+
+[env.dev]
+[env.dev.vars]
 ENVIRONMENT = "development"
 
-# [env.production]
-# vars = { ENVIRONMENT = "production" }
-# routes = [{ pattern = "api.qurl.nazarf.dev", custom_domain = true }]
+[[env.dev.kv_namespaces]]
+binding = "URL_CACHE"
+id = "26c7665d606343b3a3f6bf8d8869fa95"
+
+[[routes]]
+pattern = "api.qurl.nazarf.dev"
+custom_domain = true

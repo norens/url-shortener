@@ -1,24 +1,21 @@
 import { Hono } from "hono";
 import type { Env } from "../index";
 import { createSupabaseClient } from "../lib/supabase";
-import { createRedisClient, getCachedUrl, setCachedUrl } from "../lib/redis";
+import { getCachedUrl, setCachedUrl } from "../lib/kv";
 
 const resolve = new Hono<{ Bindings: Env }>();
 
 resolve.get("/api/resolve/:code", async (c) => {
   const code = c.req.param("code");
 
-  const redis = createRedisClient(
-    c.env.UPSTASH_REDIS_REST_URL,
-    c.env.UPSTASH_REDIS_REST_TOKEN
-  );
+  const kv = c.env.URL_CACHE;
   const supabase = createSupabaseClient(
     c.env.SUPABASE_URL,
     c.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
   // Try cache
-  let cached = await getCachedUrl(redis, code);
+  let cached = await getCachedUrl(kv, code);
 
   if (!cached) {
     const { data, error } = await supabase
@@ -37,7 +34,7 @@ resolve.get("/api/resolve/:code", async (c) => {
       is_active: data.is_active,
     };
 
-    c.executionCtx.waitUntil(setCachedUrl(redis, code, cached, data.expires_at));
+    c.executionCtx.waitUntil(setCachedUrl(kv, code, cached, data.expires_at));
   }
 
   if (!cached.is_active) {

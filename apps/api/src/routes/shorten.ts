@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import type { Env } from "../index";
 import { createSupabaseClient } from "../lib/supabase";
-import { createRedisClient, setCachedUrl } from "../lib/redis";
+import { setCachedUrl } from "../lib/kv";
 import { generateShortCode } from "../lib/codegen";
 import { shortenSchema } from "../lib/validation";
 import { checkRateLimit } from "../lib/ratelimit";
@@ -21,13 +21,10 @@ shorten.post("/api/shorten", zValidator("json", shortenSchema), async (c) => {
     c.env.SUPABASE_URL,
     c.env.SUPABASE_SERVICE_ROLE_KEY
   );
-  const redis = createRedisClient(
-    c.env.UPSTASH_REDIS_REST_URL,
-    c.env.UPSTASH_REDIS_REST_TOKEN
-  );
+  const kv = c.env.URL_CACHE;
 
   // Per-user rate limit: 20 requests per hour
-  const rl = await checkRateLimit(redis, userId, 20, 3600);
+  const rl = await checkRateLimit(kv, userId, 20, 3600);
   if (!rl.allowed) {
     return c.json(
       { error: "Rate limit exceeded. Try again in an hour." },
@@ -114,7 +111,7 @@ shorten.post("/api/shorten", zValidator("json", shortenSchema), async (c) => {
   // Cache the new URL
   c.executionCtx.waitUntil(
     setCachedUrl(
-      redis,
+      kv,
       shortCode,
       { long_url, expires_at: expires_at ?? null, is_active: true },
       expires_at ?? null

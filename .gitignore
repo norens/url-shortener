@@ -5,16 +5,19 @@ node_modules/
 # Build
 dist/
 .next/
+.open-next/
 out/
 
 # Environment
 .env
 .env.local
+.env.production
 .env.*.local
 .dev.vars
 
 # IDE
-.idea/
+.idea/*
+!.idea/runConfigurations/
 .vscode/
 *.swp
 *.swo

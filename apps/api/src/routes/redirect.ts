@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { Env } from "../index";
 import { createSupabaseClient } from "../lib/supabase";
-import { createRedisClient, getCachedUrl, setCachedUrl } from "../lib/redis";
+import { getCachedUrl, setCachedUrl } from "../lib/kv";
 import { parseDeviceType } from "../lib/device";
 import type { CachedUrl } from "@qurl/shared";
 
@@ -15,17 +15,14 @@ redirect.get("/:code", async (c) => {
     return c.notFound();
   }
 
-  const redis = createRedisClient(
-    c.env.UPSTASH_REDIS_REST_URL,
-    c.env.UPSTASH_REDIS_REST_TOKEN
-  );
+  const kv = c.env.URL_CACHE;
   const supabase = createSupabaseClient(
     c.env.SUPABASE_URL,
     c.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
   // 1. Try cache first
-  let cached = await getCachedUrl(redis, code);
+  let cached = await getCachedUrl(kv, code);
 
   // 2. Cache miss — query database
   if (!cached) {
@@ -46,7 +43,7 @@ redirect.get("/:code", async (c) => {
     };
 
     // Cache for next request
-    c.executionCtx.waitUntil(setCachedUrl(redis, code, cached, data.expires_at));
+    c.executionCtx.waitUntil(setCachedUrl(kv, code, cached, data.expires_at));
   }
 
   // 3. Check if link is active and not expired

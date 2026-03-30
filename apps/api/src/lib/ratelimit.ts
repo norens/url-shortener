@@ -1,27 +1,47 @@
-import type { Redis } from "@upstash/redis/cloudflare";
+interface RateLimitEntry {
+  count: number;
+  expiresAt: number; // Unix ms
+}
 
 /**
- * Simple per-user rate limiter backed by Upstash Redis.
- * Returns { allowed: true } or { allowed: false, retryAfter: seconds }.
+ * Simple per-user rate limiter backed by Cloudflare KV.
+ * Uses get/put with a JSON counter (no atomic incr in KV).
  */
 export async function checkRateLimit(
-  redis: Redis,
+  kv: KVNamespace,
   userId: string,
   limit: number,
   windowSeconds: number
 ): Promise<{ allowed: boolean; retryAfter?: number }> {
   const key = `rl:shorten:${userId}`;
-  const count = await redis.incr(key);
+  const now = Date.now();
 
-  if (count === 1) {
-    // First request in this window — set expiry
-    await redis.expire(key, windowSeconds);
+  const entry = await kv.get<RateLimitEntry>(key, "json");
+
+  // Window expired or first request — start new window
+  if (!entry || now >= entry.expiresAt) {
+    const newEntry: RateLimitEntry = {
+      count: 1,
+      expiresAt: now + windowSeconds * 1000,
+    };
+    await kv.put(key, JSON.stringify(newEntry), {
+      expirationTtl: windowSeconds,
+    });
+    return { allowed: true };
   }
 
-  if (count > limit) {
-    const ttl = await redis.ttl(key);
-    return { allowed: false, retryAfter: ttl > 0 ? ttl : windowSeconds };
+  // Within window — increment
+  entry.count++;
+
+  if (entry.count > limit) {
+    const retryAfter = Math.ceil((entry.expiresAt - now) / 1000);
+    return { allowed: false, retryAfter };
   }
+
+  const remainingTtl = Math.ceil((entry.expiresAt - now) / 1000);
+  await kv.put(key, JSON.stringify(entry), {
+    expirationTtl: Math.max(remainingTtl, 60),
+  });
 
   return { allowed: true };
 }
