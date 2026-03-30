@@ -12,13 +12,13 @@ me.get("/api/me", async (c) => {
 
   const supabase = createSupabaseClient(
     c.env.SUPABASE_URL,
-    c.env.SUPABASE_SERVICE_ROLE_KEY
+    c.env.SUPABASE_SERVICE_ROLE_KEY,
   );
 
   const [{ data: profile }, { count }] = await Promise.all([
     supabase
       .from("profiles")
-      .select("links_limit")
+      .select("plan, links_limit")
       .eq("id", userId)
       .single(),
     supabase
@@ -28,9 +28,9 @@ me.get("/api/me", async (c) => {
   ]);
 
   return c.json({
-    plan: "free",
+    plan: profile?.plan ?? "free",
     links_count: count ?? 0,
-    links_limit: profile?.links_limit ?? 25,
+    links_limit: profile?.links_limit ?? 20,
   });
 });
 

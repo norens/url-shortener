@@ -66,6 +66,8 @@ export interface AnalyticsResponse {
   short_code: string;
   total_clicks: number;
   clicks_today: number;
+  period: string;
+  period_clicks: number;
   daily_clicks: { date: string; clicks: number }[];
   top_countries: { country: string; clicks: number }[];
   top_cities: { city: string; clicks: number }[];
@@ -86,9 +88,12 @@ export interface PaginatedResponse<T> {
   total_pages: number;
 }
 
-// Cached URL structure in Redis
+export type AnalyticsPeriod = "24h" | "7d" | "30d" | "90d" | "365d" | "all";
+
+// Cached URL structure in KV
 export interface CachedUrl {
   long_url: string;
   expires_at: string | null;
   is_active: boolean;
+  user_id: string | null;
 }

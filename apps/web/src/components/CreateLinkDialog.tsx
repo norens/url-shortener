@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { X, Plus } from "lucide-react";
-import { apiPost } from "@/lib/api";
 import type { ShortenRequest, ShortenResponse } from "@qurl/shared";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Plus, X } from "lucide-react";
+import { useState } from "react";
+import { apiPost } from "@/lib/api";
 
 interface Props {
   onCreated: () => void;
@@ -48,7 +48,10 @@ export function CreateLinkDialog({ onCreated }: Props) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+        <button
+          type="button"
+          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+        >
           <Plus className="h-4 w-4" />
           Create Link
         </button>
@@ -56,20 +59,20 @@ export function CreateLinkDialog({ onCreated }: Props) {
 
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white p-6 shadow-xl">
-          <Dialog.Title className="text-lg font-semibold text-gray-900">
+        <Dialog.Content className="fixed left-1/2 top-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white dark:bg-gray-900 p-6 shadow-xl">
+          <Dialog.Title className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             Create Short Link
           </Dialog.Title>
 
           <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             {error && (
-              <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+              <div className="rounded-md bg-red-50 dark:bg-red-950 p-3 text-sm text-red-700 dark:text-red-400">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Destination URL *
               </label>
               <input
@@ -77,13 +80,13 @@ export function CreateLinkDialog({ onCreated }: Props) {
                 required
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="https://example.com/very-long-url"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Title (optional)
               </label>
               <input
@@ -91,14 +94,14 @@ export function CreateLinkDialog({ onCreated }: Props) {
                 maxLength={255}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="My campaign link"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Custom alias (optional)
                 </label>
                 <input
@@ -106,13 +109,15 @@ export function CreateLinkDialog({ onCreated }: Props) {
                   maxLength={7}
                   value={alias}
                   onChange={(e) => setAlias(e.target.value)}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   placeholder="my-link"
                 />
-                <p className="mt-1 text-xs text-gray-400">{alias.length}/7 characters</p>
+                <p className="mt-1 text-xs text-gray-400">
+                  {alias.length}/7 characters
+                </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Expires At (optional)
                 </label>
                 <input
@@ -120,7 +125,7 @@ export function CreateLinkDialog({ onCreated }: Props) {
                   value={expiresAt}
                   onChange={(e) => setExpiresAt(e.target.value)}
                   min={new Date().toISOString().slice(0, 16)}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -129,7 +134,7 @@ export function CreateLinkDialog({ onCreated }: Props) {
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="rounded-lg border border-gray-300 dark:border-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </button>
@@ -146,7 +151,8 @@ export function CreateLinkDialog({ onCreated }: Props) {
 
           <Dialog.Close asChild>
             <button
-              className="absolute right-4 top-4 text-gray-400 hover:text-gray-500"
+              type="button"
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
               aria-label="Close"
             >
               <X className="h-4 w-4" />

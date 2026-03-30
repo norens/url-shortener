@@ -1,5 +1,5 @@
+import { ALIAS_REGEX, MAX_ALIAS_LENGTH } from "@qurl/shared";
 import { z } from "zod";
-import { MAX_ALIAS_LENGTH, ALIAS_REGEX } from "@qurl/shared";
 
 export const shortenSchema = z.object({
   long_url: z
@@ -7,15 +7,25 @@ export const shortenSchema = z.object({
     .url("Invalid URL format")
     .refine(
       (url) => {
-        const parsed = new URL(url);
-        return parsed.protocol === "http:" || parsed.protocol === "https:";
+        try {
+          const parsed = new URL(url);
+          return parsed.protocol === "http:" || parsed.protocol === "https:";
+        } catch {
+          return false;
+        }
       },
-      { message: "Only http and https URLs are allowed" }
+      { message: "Only http and https URLs are allowed" },
     ),
   alias: z
     .string()
-    .max(MAX_ALIAS_LENGTH, `Alias must be at most ${MAX_ALIAS_LENGTH} characters`)
-    .regex(ALIAS_REGEX, "Alias can only contain letters, numbers, hyphens, and underscores")
+    .max(
+      MAX_ALIAS_LENGTH,
+      `Alias must be at most ${MAX_ALIAS_LENGTH} characters`,
+    )
+    .regex(
+      ALIAS_REGEX,
+      "Alias can only contain letters, numbers, hyphens, and underscores",
+    )
     .optional(),
   title: z.string().max(255).optional(),
   expires_at: z
@@ -27,16 +37,37 @@ export const shortenSchema = z.object({
     .optional(),
 });
 
+export const anonymousShortenSchema = z.object({
+  url: z
+    .string()
+    .url("Invalid URL format")
+    .refine(
+      (url) => {
+        try {
+          const parsed = new URL(url);
+          return parsed.protocol === "http:" || parsed.protocol === "https:";
+        } catch {
+          return false;
+        }
+      },
+      { message: "Only http and https URLs are allowed" },
+    ),
+});
+
 export const updateLinkSchema = z.object({
   long_url: z
     .string()
     .url("Invalid URL format")
     .refine(
       (url) => {
-        const parsed = new URL(url);
-        return parsed.protocol === "http:" || parsed.protocol === "https:";
+        try {
+          const parsed = new URL(url);
+          return parsed.protocol === "http:" || parsed.protocol === "https:";
+        } catch {
+          return false;
+        }
       },
-      { message: "Only http and https URLs are allowed" }
+      { message: "Only http and https URLs are allowed" },
     )
     .optional(),
   title: z.string().max(255).optional(),

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { Env } from "../index";
-import { createSupabaseClient } from "../lib/supabase";
 import { getCachedUrl, setCachedUrl } from "../lib/kv";
+import { createSupabaseClient } from "../lib/supabase";
 
 const resolve = new Hono<{ Bindings: Env }>();
 
@@ -11,7 +11,7 @@ resolve.get("/api/resolve/:code", async (c) => {
   const kv = c.env.URL_CACHE;
   const supabase = createSupabaseClient(
     c.env.SUPABASE_URL,
-    c.env.SUPABASE_SERVICE_ROLE_KEY
+    c.env.SUPABASE_SERVICE_ROLE_KEY,
   );
 
   // Try cache
@@ -20,7 +20,7 @@ resolve.get("/api/resolve/:code", async (c) => {
   if (!cached) {
     const { data, error } = await supabase
       .from("urls")
-      .select("long_url, expires_at, is_active")
+      .select("long_url, expires_at, is_active, user_id")
       .eq("short_code", code)
       .single();
 
@@ -32,6 +32,7 @@ resolve.get("/api/resolve/:code", async (c) => {
       long_url: data.long_url,
       expires_at: data.expires_at,
       is_active: data.is_active,
+      user_id: data.user_id,
     };
 
     c.executionCtx.waitUntil(setCachedUrl(kv, code, cached, data.expires_at));

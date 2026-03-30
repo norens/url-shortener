@@ -1,13 +1,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
-import shorten from "./routes/shorten";
-import resolve from "./routes/resolve";
-import redirect from "./routes/redirect";
-import links from "./routes/links";
-import analytics from "./routes/analytics";
-import me from "./routes/me";
 import { authMiddleware } from "./middleware/auth";
+import analytics from "./routes/analytics";
+import links from "./routes/links";
+import me from "./routes/me";
+import redirect from "./routes/redirect";
+import resolve from "./routes/resolve";
+import shorten, { anonymousShorten } from "./routes/shorten";
 
 export type Env = {
   SUPABASE_URL: string;
@@ -27,7 +27,7 @@ app.use(
     allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
     maxAge: 86400,
-  })
+  }),
 );
 
 // Health check
@@ -40,7 +40,10 @@ app.use("/api/links", authMiddleware);
 app.use("/api/analytics/*", authMiddleware);
 app.use("/api/me", authMiddleware);
 
-// Routes
+// Public routes (no auth)
+app.route("/", anonymousShorten);
+
+// Authenticated routes
 app.route("/", shorten);
 app.route("/", resolve);
 app.route("/", links);

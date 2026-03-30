@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { apiPatch, apiDelete } from "@/lib/api";
+import { apiDelete, apiPatch } from "@/lib/api";
 
 interface Props {
   shortCode: string;
@@ -60,17 +60,19 @@ export function EditLinkForm({
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6">
-      <h3 className="text-sm font-medium text-gray-900">Edit Link</h3>
+    <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
+      <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+        Edit Link
+      </h3>
       <form onSubmit={handleSave} className="mt-4 space-y-4">
         {error && (
-          <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+          <div className="rounded-md bg-red-50 dark:bg-red-950 p-3 text-sm text-red-700 dark:text-red-400">
             {error}
           </div>
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Destination URL
           </label>
           <input
@@ -78,19 +80,19 @@ export function EditLinkForm({
             required
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Title
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
@@ -101,8 +103,8 @@ export function EditLinkForm({
             disabled={saving}
             className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
               isActive
-                ? "text-red-600 hover:bg-red-50"
-                : "text-green-600 hover:bg-green-50"
+                ? "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
+                : "text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950"
             } disabled:opacity-50`}
           >
             {isActive ? "Deactivate" : "Reactivate"}

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export default function Error({
+export default function ErrorPage({
   error,
   reset,
 }: {
@@ -23,6 +23,7 @@ export default function Error({
         An unexpected error occurred. Please try again.
       </p>
       <button
+        type="button"
         onClick={reset}
         className="mt-8 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
       >

@@ -1,5 +1,5 @@
 export function parseDeviceType(
-  userAgent: string | null
+  userAgent: string | null,
 ): "mobile" | "desktop" | "tablet" | "unknown" {
   if (!userAgent) return "unknown";
   const ua = userAgent.toLowerCase();

@@ -1,10 +1,10 @@
-import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import type { Env } from "../index";
-import { createSupabaseClient } from "../lib/supabase";
-import { deleteCachedUrl } from "../lib/kv";
-import { updateLinkSchema } from "../lib/validation";
 import { SHORT_URL_BASE } from "@qurl/shared";
+import { Hono } from "hono";
+import type { Env } from "../index";
+import { deleteCachedUrl } from "../lib/kv";
+import { createSupabaseClient } from "../lib/supabase";
+import { updateLinkSchema } from "../lib/validation";
 
 const links = new Hono<{
   Bindings: Env;
@@ -14,30 +14,30 @@ const links = new Hono<{
 // List user's links (paginated)
 links.get("/api/links", async (c) => {
   const userId = c.get("userId");
-  const page = parseInt(c.req.query("page") ?? "1");
-  const perPage = parseInt(c.req.query("per_page") ?? "20");
+  const page = parseInt(c.req.query("page") ?? "1", 10);
+  const perPage = parseInt(c.req.query("per_page") ?? "20", 10);
   const search = c.req.query("search") ?? "";
   const sort = c.req.query("sort") ?? "created_at";
-  const order = c.req.query("order") === "asc" ? true : false;
+  const order = c.req.query("order") === "asc";
 
   const offset = (page - 1) * perPage;
 
   const supabase = createSupabaseClient(
     c.env.SUPABASE_URL,
-    c.env.SUPABASE_SERVICE_ROLE_KEY
+    c.env.SUPABASE_SERVICE_ROLE_KEY,
   );
 
   let query = supabase
     .from("urls")
     .select(
       "id, short_code, long_url, title, is_active, expires_at, created_at, updated_at, click_totals(total_clicks)",
-      { count: "exact" }
+      { count: "exact" },
     )
     .eq("user_id", userId);
 
   if (search) {
     query = query.or(
-      `long_url.ilike.%${search}%,title.ilike.%${search}%,short_code.ilike.%${search}%`
+      `long_url.ilike.%${search}%,title.ilike.%${search}%,short_code.ilike.%${search}%`,
     );
   }
 
@@ -52,7 +52,7 @@ links.get("/api/links", async (c) => {
   }
 
   const total = count ?? 0;
-  const links_data = (data ?? []).map((item: any) => ({
+  const links_data = (data ?? []).map((item) => ({
     id: item.id,
     short_code: item.short_code,
     short_url: `${SHORT_URL_BASE}/${item.short_code}`,
@@ -62,7 +62,9 @@ links.get("/api/links", async (c) => {
     expires_at: item.expires_at,
     created_at: item.created_at,
     updated_at: item.updated_at,
-    total_clicks: item.click_totals?.total_clicks ?? 0,
+    total_clicks:
+      (item.click_totals as { total_clicks: number }[] | null)?.[0]
+        ?.total_clicks ?? 0,
   }));
 
   return c.json({
@@ -85,7 +87,7 @@ links.patch(
 
     const supabase = createSupabaseClient(
       c.env.SUPABASE_URL,
-      c.env.SUPABASE_SERVICE_ROLE_KEY
+      c.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
     // Verify ownership
@@ -118,7 +120,7 @@ links.patch(
     c.executionCtx.waitUntil(deleteCachedUrl(c.env.URL_CACHE, code));
 
     return c.json(data);
-  }
+  },
 );
 
 // Deactivate a link (soft delete)
@@ -128,7 +130,7 @@ links.delete("/api/links/:code", async (c) => {
 
   const supabase = createSupabaseClient(
     c.env.SUPABASE_URL,
-    c.env.SUPABASE_SERVICE_ROLE_KEY
+    c.env.SUPABASE_SERVICE_ROLE_KEY,
   );
 
   // Verify ownership

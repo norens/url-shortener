@@ -1,6 +1,6 @@
-import type { NextConfig } from "next";
 import path from "node:path";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+import type { NextConfig } from "next";
 
 initOpenNextCloudflareForDev();
 

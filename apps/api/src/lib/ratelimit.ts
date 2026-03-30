@@ -11,7 +11,7 @@ export async function checkRateLimit(
   kv: KVNamespace,
   userId: string,
   limit: number,
-  windowSeconds: number
+  windowSeconds: number,
 ): Promise<{ allowed: boolean; retryAfter?: number }> {
   const key = `rl:shorten:${userId}`;
   const now = Date.now();

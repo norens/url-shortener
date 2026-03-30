@@ -1,21 +1,15 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import useSWR from "swr";
+import type { LinkWithClicks, PaginatedResponse } from "@qurl/shared";
+import { BarChart3, Check, Copy } from "lucide-react";
 import Link from "next/link";
-import {
-  Copy,
-  Check,
-  ExternalLink,
-  BarChart3,
-  ToggleLeft,
-  ToggleRight,
-} from "lucide-react";
-import { apiGet } from "@/lib/api";
+import { useCallback, useState } from "react";
+import useSWR from "swr";
 import { CreateLinkDialog } from "@/components/CreateLinkDialog";
-import type { PaginatedResponse, LinkWithClicks } from "@qurl/shared";
+import { apiGet } from "@/lib/api";
 
-const SHORT_URL_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8787";
+const SHORT_URL_BASE =
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8787";
 
 export default function LinksPage() {
   const [page, setPage] = useState(1);
@@ -24,7 +18,7 @@ export default function LinksPage() {
 
   const { data, mutate, isLoading } = useSWR(
     `/api/links?page=${page}&per_page=20&search=${search}`,
-    (url: string) => apiGet<PaginatedResponse<LinkWithClicks>>(url)
+    (url: string) => apiGet<PaginatedResponse<LinkWithClicks>>(url),
   );
 
   const handleCopy = useCallback(async (shortCode: string) => {
@@ -36,7 +30,9 @@ export default function LinksPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Links</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Links
+        </h1>
         <CreateLinkDialog onCreated={() => mutate()} />
       </div>
 
@@ -49,7 +45,7 @@ export default function LinksPage() {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="w-full max-w-sm rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full max-w-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
@@ -58,53 +54,57 @@ export default function LinksPage() {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="h-16 animate-pulse rounded-lg bg-gray-100"
+              className="h-16 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800"
             />
           ))}
         </div>
       ) : !data?.data.length ? (
-        <div className="rounded-lg border border-dashed border-gray-300 p-12 text-center">
+        <div className="rounded-lg border border-dashed border-gray-300 dark:border-gray-700 p-12 text-center">
           <Link2Icon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900">
+          <h3 className="mt-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
             No links yet
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Create your first short link to get started.
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+            <thead className="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Link
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Destination
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Clicks
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Status
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {data.data.map((link) => (
-                <tr key={link.id} className="hover:bg-gray-50">
+                <tr
+                  key={link.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-blue-600">
+                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
                         {link.short_code}
                       </span>
                       <button
+                        type="button"
                         onClick={() => handleCopy(link.short_code)}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                         title="Copy short URL"
                       >
                         {copiedCode === link.short_code ? (
@@ -115,21 +115,23 @@ export default function LinksPage() {
                       </button>
                     </div>
                     {link.title && (
-                      <p className="text-xs text-gray-500">{link.title}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {link.title}
+                      </p>
                     )}
                   </td>
-                  <td className="max-w-xs truncate px-4 py-3 text-sm text-gray-600">
+                  <td className="max-w-xs truncate px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
                     {link.long_url}
                   </td>
-                  <td className="px-4 py-3 text-center text-sm font-medium text-gray-900">
+                  <td className="px-4 py-3 text-center text-sm font-medium text-gray-900 dark:text-gray-100">
                     {link.total_clicks.toLocaleString()}
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span
                       className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
                         link.is_active
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-600"
+                          ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400"
+                          : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
                       }`}
                     >
                       {link.is_active ? "Active" : "Inactive"}
@@ -138,7 +140,7 @@ export default function LinksPage() {
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/links/${link.short_code}`}
-                      className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
+                      className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       <BarChart3 className="h-4 w-4" />
                       Details
@@ -153,21 +155,23 @@ export default function LinksPage() {
 
       {data && data.total_pages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Page {data.page} of {data.total_pages} ({data.total} links)
           </p>
           <div className="flex gap-2">
             <button
+              type="button"
               disabled={page <= 1}
               onClick={() => setPage(page - 1)}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              className="rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50"
             >
               Previous
             </button>
             <button
+              type="button"
               disabled={page >= data.total_pages}
               onClick={() => setPage(page + 1)}
-              className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              className="rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50"
             >
               Next
             </button>

@@ -1,4 +1,4 @@
-.PHONY: dev dev-api dev-web build build-api build-web typecheck install clean deploy deploy-api deploy-web preview-web
+.PHONY: dev dev-api dev-web build build-api build-web typecheck test lint lint-fix install clean deploy deploy-api deploy-web preview-web
 
 # Run both API and web in parallel
 dev:
@@ -26,6 +26,18 @@ build-web:
 # Type check all packages
 typecheck:
 	pnpm -r typecheck
+
+# Run all tests
+test:
+	pnpm -r test
+
+# Lint all packages (check only)
+lint:
+	pnpm run lint
+
+# Lint and auto-fix all packages
+lint-fix:
+	pnpm run lint:fix
 
 # Install dependencies
 install:
