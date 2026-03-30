@@ -16,6 +16,7 @@ import { useCallback, useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8787";
+const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "";
 
 interface ShortenResult {
   short_code: string;
@@ -265,7 +266,7 @@ export default function LandingPage() {
                 <PlanItem>1-year analytics</PlanItem>
               </ul>
               <a
-                href="mailto:nazarfedisin@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="mt-6 block w-full rounded-lg border border-gray-200 py-2.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Contact Us
@@ -286,7 +287,7 @@ export default function LandingPage() {
                 <PlanItem>Unlimited analytics</PlanItem>
               </ul>
               <a
-                href="mailto:nazarfedisin@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="mt-6 block w-full rounded-lg border border-gray-200 py-2.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Contact Us

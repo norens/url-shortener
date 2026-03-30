@@ -1,5 +1,5 @@
 name = "qurl-api"
-account_id = "21ab5232282fb7085a857b3a39f3bd99"
+# Set CLOUDFLARE_ACCOUNT_ID env var instead of hardcoding
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
@@ -9,7 +9,7 @@ ENVIRONMENT = "production"
 
 [[kv_namespaces]]
 binding = "URL_CACHE"
-id = "156b39cc51ad4e86b92d3f62d36a9f32"
+id = "" # Create KV namespace: wrangler kv namespace create URL_CACHE
 
 [env.dev]
 [env.dev.vars]
@@ -17,7 +17,7 @@ ENVIRONMENT = "development"
 
 [[env.dev.kv_namespaces]]
 binding = "URL_CACHE"
-id = "26c7665d606343b3a3f6bf8d8869fa95"
+id = "" # Create KV namespace: wrangler kv namespace create URL_CACHE --env dev
 
 [[routes]]
 pattern = "api.qurl.nazarf.dev"

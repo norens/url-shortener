@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "qurl-web",
-  "account_id": "21ab5232282fb7085a857b3a39f3bd99",
+  // Set CLOUDFLARE_ACCOUNT_ID env var instead of hardcoding
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-05-05",
   "compatibility_flags": ["nodejs_compat"],
@@ -12,6 +12,7 @@
   "vars": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://ahfmzmamoxxduumjhhcf.supabase.co",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_VCzsZgkPGwEoQjE-CkM5ww_n6Kpqvic",
-    "NEXT_PUBLIC_API_URL": "https://api.qurl.nazarf.dev"
+    "NEXT_PUBLIC_API_URL": "https://api.qurl.nazarf.dev",
+    "NEXT_PUBLIC_CONTACT_EMAIL": "qurl@nazarf.dev"
   }
 }
