@@ -89,7 +89,7 @@ export default function SettingsPage() {
             {me && (
               <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
                 <div
-                  className="h-full rounded-full bg-blue-500 transition-all"
+                  className="h-full rounded-full bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500 transition-all"
                   style={{ width: `${Math.min(usagePct, 100)}%` }}
                 />
               </div>

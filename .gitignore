@@ -32,6 +32,9 @@ Thumbs.db
 # Turbo
 .turbo/
 
+# Superpowers
+.superpowers/
+
 # Logs
 *.log
 npm-debug.log*

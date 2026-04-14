@@ -113,7 +113,7 @@ export default function LinkDetailPage({
         <div className="flex items-center gap-6">
           {analytics?.period_clicks != null && (
             <div className="text-right">
-              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
                 {analytics.period_clicks.toLocaleString()}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">

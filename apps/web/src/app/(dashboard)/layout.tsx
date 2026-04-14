@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
+
+export const metadata: Metadata = { title: "Dashboard — Qurl" };
 
 export default function DashboardLayout({
   children,

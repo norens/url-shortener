@@ -21,14 +21,12 @@ export const metadata: Metadata = {
     description: "Open-source URL shortener with analytics",
     url: "https://qurl.nazarf.dev",
     siteName: "Qurl",
-    images: [{ url: "/og-image.svg", width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Qurl",
     description: "Open-source URL shortener with analytics",
-    images: ["/og-image.svg"],
   },
 };
 

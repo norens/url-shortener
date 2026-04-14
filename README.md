@@ -20,6 +20,7 @@ Free URL shortener with analytics. Shorten links, track clicks, see where they c
 
 **Live:** [qurl.nazarf.dev](https://qurl.nazarf.dev)
 **API:** [api.qurl.nazarf.dev](https://api.qurl.nazarf.dev/health)
+**GitHub:** [norens/url-shortener](https://github.com/norens/url-shortener)
 
 ## Stack
 

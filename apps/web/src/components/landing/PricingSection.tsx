@@ -6,7 +6,7 @@ const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "";
 function PlanItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-center gap-2">
-      <Check className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+      <Check className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
       {children}
     </li>
   );
@@ -25,8 +25,9 @@ export function PricingSection() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
           {/* Free */}
-          <div className="relative rounded-xl border-2 border-gray-900 bg-white p-6 dark:border-gray-100 dark:bg-gray-900">
-            <span className="absolute -top-3 left-4 rounded-full bg-gray-900 px-3 py-0.5 text-xs font-medium text-white dark:bg-gray-100 dark:text-gray-900">
+          <div className="relative overflow-hidden rounded-xl border-2 border-indigo-600 bg-white p-6 dark:border-indigo-400 dark:bg-gray-900">
+            <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600" />
+            <span className="absolute -top-3 left-4 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-3 py-0.5 text-xs font-medium text-white">
               Most popular
             </span>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -42,7 +43,7 @@ export function PricingSection() {
             </ul>
             <Link
               href="/signup"
-              className="mt-6 block w-full rounded-lg bg-gray-900 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+              className="mt-6 block w-full rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 py-2.5 text-center text-sm font-medium text-white hover:opacity-90"
             >
               Get Started
             </Link>

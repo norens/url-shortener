@@ -34,10 +34,10 @@ import * as urlRepo from "../repositories/url.repository";
 import { resolveLink } from "../services/link.service";
 import type { Deps } from "../types";
 
-const mockDeps: Deps = {
-  supabase: {} as any,
-  kv: {} as any,
-};
+const mockDeps = {
+  supabase: {},
+  kv: {},
+} as unknown as Deps;
 
 describe("resolveLink", () => {
   it("returns cached URL when found in KV", async () => {
@@ -68,7 +68,7 @@ describe("resolveLink", () => {
         user_id: "user-2",
       },
       error: null,
-    } as any);
+    } as unknown as Awaited<ReturnType<typeof urlRepo.findForRedirect>>);
 
     const result = await resolveLink(mockDeps, "dbcode");
 
@@ -95,7 +95,7 @@ describe("resolveLink", () => {
     vi.mocked(urlRepo.findForRedirect).mockResolvedValue({
       data: null,
       error: { code: "PGRST116" },
-    } as any);
+    } as unknown as Awaited<ReturnType<typeof urlRepo.findForRedirect>>);
 
     await expect(resolveLink(mockDeps, "missing")).rejects.toThrow(
       NotFoundError,

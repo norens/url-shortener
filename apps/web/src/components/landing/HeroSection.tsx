@@ -55,6 +55,9 @@ export function HeroSection() {
   return (
     <section className="mx-auto max-w-5xl px-6 pb-20 pt-24 sm:pt-32">
       <div className="mx-auto max-w-2xl text-center">
+        <span className="inline-flex items-center rounded-full bg-violet-500/10 px-3 py-1 text-sm font-medium text-violet-600 dark:text-violet-400 mb-4">
+          Free & Open Source
+        </span>
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
           Shorten any URL in seconds
         </h1>
@@ -78,7 +81,7 @@ export function HeroSection() {
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-5 py-3 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             Shorten
