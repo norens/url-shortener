@@ -1,6 +1,18 @@
 # Qurl
 
+[![CI](https://github.com/norens/url-shortener/actions/workflows/ci.yml/badge.svg)](https://github.com/norens/url-shortener/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Free URL shortener with analytics. Shorten links, track clicks, see where they come from.
+
+## Features
+
+- Free URL shortening with custom aliases
+- Click analytics (countries, cities, devices, referrers)
+- Plan-based limits (Free / Pro / Business)
+- Anonymous links (no sign-up required, 7-day expiry)
+- Sub-50ms redirects via Cloudflare's edge network
+- Dark mode support
 
 **Live:** [qurl.nazarf.dev](https://qurl.nazarf.dev)
 **API:** [api.qurl.nazarf.dev](https://api.qurl.nazarf.dev/health)
@@ -68,6 +80,14 @@ make deploy-web      # Deploy web only
 | `GET` | `/api/me` | JWT | Current user info |
 | `GET` | `/health` | - | Health check |
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and guidelines.
+
+## Security
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md). Please do not open public issues for security concerns.
+
 ## License
 
-MIT
+This project is licensed under the [MIT License](LICENSE).
