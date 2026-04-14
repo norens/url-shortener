@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { SHORT_URL_BASE } from "@qurl/shared";
 import { Hono } from "hono";
-import type { Env } from "../index";
+import type { Env } from "../types";
 import { deleteCachedUrl } from "../lib/kv";
 import { createSupabaseClient } from "../lib/supabase";
 import { updateLinkSchema } from "../lib/validation";

@@ -2,21 +2,20 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
 import { authMiddleware } from "./middleware/auth";
+import { errorHandler } from "./middleware/error-handler";
 import analytics from "./routes/analytics";
 import links from "./routes/links";
 import me from "./routes/me";
 import redirect from "./routes/redirect";
 import resolve from "./routes/resolve";
 import shorten, { anonymousShorten } from "./routes/shorten";
+import type { Env } from "./types";
 
-export type Env = {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
-  URL_CACHE: KVNamespace;
-  ENVIRONMENT: string;
-};
+export type { Env } from "./types";
 
 const app = new Hono<{ Bindings: Env }>();
+
+app.onError(errorHandler);
 
 // Global middleware
 app.use("*", secureHeaders());

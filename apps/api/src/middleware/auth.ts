@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { createMiddleware } from "hono/factory";
-import type { Env } from "../index";
+import type { Env } from "../types";
 
 export const authMiddleware = createMiddleware<{
   Bindings: Env;

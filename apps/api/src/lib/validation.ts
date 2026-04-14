@@ -1,21 +1,23 @@
 import { ALIAS_REGEX, MAX_ALIAS_LENGTH } from "@qurl/shared";
 import { z } from "zod";
 
+const httpUrlSchema = z
+  .string()
+  .url("Invalid URL format")
+  .refine(
+    (url) => {
+      try {
+        const parsed = new URL(url);
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
+      } catch {
+        return false;
+      }
+    },
+    { message: "Only http and https URLs are allowed" },
+  );
+
 export const shortenSchema = z.object({
-  long_url: z
-    .string()
-    .url("Invalid URL format")
-    .refine(
-      (url) => {
-        try {
-          const parsed = new URL(url);
-          return parsed.protocol === "http:" || parsed.protocol === "https:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Only http and https URLs are allowed" },
-    ),
+  long_url: httpUrlSchema,
   alias: z
     .string()
     .max(
@@ -38,38 +40,11 @@ export const shortenSchema = z.object({
 });
 
 export const anonymousShortenSchema = z.object({
-  url: z
-    .string()
-    .url("Invalid URL format")
-    .refine(
-      (url) => {
-        try {
-          const parsed = new URL(url);
-          return parsed.protocol === "http:" || parsed.protocol === "https:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Only http and https URLs are allowed" },
-    ),
+  url: httpUrlSchema,
 });
 
 export const updateLinkSchema = z.object({
-  long_url: z
-    .string()
-    .url("Invalid URL format")
-    .refine(
-      (url) => {
-        try {
-          const parsed = new URL(url);
-          return parsed.protocol === "http:" || parsed.protocol === "https:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Only http and https URLs are allowed" },
-    )
-    .optional(),
+  long_url: httpUrlSchema.optional(),
   title: z.string().max(255).optional(),
   is_active: z.boolean().optional(),
 });

@@ -7,7 +7,7 @@ import {
   SHORT_URL_BASE,
 } from "@qurl/shared";
 import { Hono } from "hono";
-import type { Env } from "../index";
+import type { Env } from "../types";
 import { generateShortCode } from "../lib/codegen";
 import { setCachedUrl } from "../lib/kv";
 import { checkRateLimit } from "../lib/ratelimit";

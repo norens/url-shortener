@@ -1,7 +1,7 @@
 import type { AnalyticsPeriod, AnalyticsResponse } from "@qurl/shared";
 import { PERIOD_DAYS, PLAN_LIMITS } from "@qurl/shared";
 import { Hono } from "hono";
-import type { Env } from "../index";
+import type { Env } from "../types";
 import { createSupabaseClient } from "../lib/supabase";
 
 const VALID_PERIODS: AnalyticsPeriod[] = [

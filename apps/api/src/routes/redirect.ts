@@ -1,7 +1,7 @@
 import type { Profile } from "@qurl/shared";
 import { PLAN_LIMITS } from "@qurl/shared";
 import { Hono } from "hono";
-import type { Env } from "../index";
+import type { Env } from "../types";
 import { parseDeviceType } from "../lib/device";
 import {
   getCachedUrl,
