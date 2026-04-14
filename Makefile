@@ -48,11 +48,11 @@ deploy: deploy-api deploy-web
 
 # Deploy API to Cloudflare Workers
 deploy-api:
-	pnpm --filter api deploy
+	pnpm --filter api run deploy
 
 # Deploy web to Cloudflare Workers (via OpenNext)
 deploy-web:
-	pnpm --filter web deploy
+	pnpm --filter web run deploy
 
 # Preview web in local Workers runtime
 preview-web:

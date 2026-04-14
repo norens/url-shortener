@@ -30,6 +30,8 @@ Free URL shortener with analytics. Shorten links, track clicks, see where they c
 | Cache | KV | Cloudflare KV |
 | Database | PostgreSQL | Supabase |
 | Auth | Supabase Auth | Supabase |
+| Linting | Biome | - |
+| Monorepo | pnpm workspaces | - |
 
 ## Project Structure
 
@@ -40,7 +42,11 @@ qurl/
 │   └── web/          # Next.js frontend (CF Workers via OpenNext)
 ├── packages/
 │   └── shared/       # Shared types & constants
-├── docs/             # Design specs
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── DATABASE.md
+│   ├── setup.md
+│   └── deploy.md
 ├── Makefile
 └── pnpm-workspace.yaml
 ```
@@ -70,12 +76,23 @@ make deploy-api      # Deploy API only
 make deploy-web      # Deploy web only
 ```
 
+## Development
+
+```bash
+make test            # Run all tests
+make lint            # Check linting (Biome)
+make lint-fix        # Auto-fix lint issues
+make typecheck       # Type check all packages
+make clean           # Clean build artifacts and node_modules
+```
+
 ## API
 
 | Method | Route | Auth | Description |
 |--------|-------|------|-------------|
 | `GET` | `/:code` | - | Redirect (302) |
 | `POST` | `/api/shorten` | JWT | Create short link |
+| `POST` | `/api/shorten/anonymous` | - | Create anonymous link (7-day expiry) |
 | `GET` | `/api/resolve/:code` | - | Resolve without redirect |
 | `GET` | `/api/links` | JWT | List user's links |
 | `PATCH` | `/api/links/:code` | JWT | Update link |
@@ -83,6 +100,14 @@ make deploy-web      # Deploy web only
 | `GET` | `/api/analytics/:code` | JWT | Link analytics |
 | `GET` | `/api/me` | JWT | Current user info |
 | `GET` | `/health` | - | Health check |
+
+## Docs
+
+- [Architecture](docs/ARCHITECTURE.md) — system design, request flow, layered architecture
+- [Database](docs/DATABASE.md) — schema, indexes, RLS policies
+- [Setup](docs/setup.md) — local development setup
+- [Deploy](docs/deploy.md) — Cloudflare Workers deployment
+- [Changelog](CHANGELOG.md) — version history
 
 ## Contributing
 
