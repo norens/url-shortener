@@ -1,11 +1,11 @@
 import type { AnalyticsPeriod, AnalyticsResponse, UrlScan } from "@qurl/shared";
 import { PERIOD_DAYS, PLAN_LIMITS } from "@qurl/shared";
-import type { Deps } from "../types";
 import { ForbiddenError, NotFoundError } from "../errors";
 import * as clickTotalRepo from "../repositories/click-total.repository";
 import * as profileRepo from "../repositories/profile.repository";
 import * as scanRepo from "../repositories/scan.repository";
 import * as urlRepo from "../repositories/url.repository";
+import type { Deps } from "../types";
 
 const VALID_PERIODS: AnalyticsPeriod[] = [
   "24h",

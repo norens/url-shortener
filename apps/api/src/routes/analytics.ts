@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import type { Env } from "../types";
 import { createSupabaseClient } from "../lib/supabase";
 import { getAnalytics } from "../services/analytics.service";
+import type { Env } from "../types";
 
 const analytics = new Hono<{
   Bindings: Env;
@@ -14,7 +14,10 @@ analytics.get("/api/analytics/:code", async (c) => {
   const period = c.req.query("period");
 
   const deps = {
-    supabase: createSupabaseClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY),
+    supabase: createSupabaseClient(
+      c.env.SUPABASE_URL,
+      c.env.SUPABASE_SERVICE_ROLE_KEY,
+    ),
     kv: c.env.URL_CACHE,
   };
 

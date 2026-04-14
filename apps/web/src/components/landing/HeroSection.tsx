@@ -59,8 +59,8 @@ export function HeroSection() {
           Shorten any URL in seconds
         </h1>
         <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-          Free, fast, and open source. Create short links with analytics
-          powered by Cloudflare&apos;s edge network.
+          Free, fast, and open source. Create short links with analytics powered
+          by Cloudflare&apos;s edge network.
         </p>
       </div>
 
@@ -86,9 +86,7 @@ export function HeroSection() {
         </div>
 
         {error && (
-          <p className="mt-3 text-sm text-red-600 dark:text-red-400">
-            {error}
-          </p>
+          <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>
         )}
       </form>
 

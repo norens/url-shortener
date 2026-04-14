@@ -1,9 +1,9 @@
 import { Hono } from "hono";
+import { createSupabaseClient } from "../lib/supabase";
+import { trackClickIfAllowed } from "../services/click.service";
+import { resolveLink } from "../services/link.service";
 import type { Env } from "../types";
 import { CF_HEADERS } from "../types";
-import { createSupabaseClient } from "../lib/supabase";
-import { resolveLink } from "../services/link.service";
-import { trackClickIfAllowed } from "../services/click.service";
 
 const redirect = new Hono<{ Bindings: Env }>();
 
@@ -15,7 +15,10 @@ redirect.get("/:code", async (c) => {
   }
 
   const deps = {
-    supabase: createSupabaseClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY),
+    supabase: createSupabaseClient(
+      c.env.SUPABASE_URL,
+      c.env.SUPABASE_SERVICE_ROLE_KEY,
+    ),
     kv: c.env.URL_CACHE,
   };
 

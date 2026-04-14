@@ -1,6 +1,6 @@
-import type { Deps } from "../types";
 import * as profileRepo from "../repositories/profile.repository";
 import * as urlRepo from "../repositories/url.repository";
+import type { Deps } from "../types";
 
 export async function getProfile(deps: Deps, userId: string) {
   const [{ data: profile }, { count }] = await Promise.all([

@@ -1,11 +1,11 @@
 import type { Profile } from "@qurl/shared";
 import { PLAN_LIMITS } from "@qurl/shared";
-import type { Deps } from "../types";
 import { parseDeviceType } from "../lib/device";
 import * as cacheRepo from "../repositories/cache.repository";
 import * as clickTotalRepo from "../repositories/click-total.repository";
 import * as profileRepo from "../repositories/profile.repository";
 import * as scanRepo from "../repositories/scan.repository";
+import type { Deps } from "../types";
 
 interface ClickMeta {
   country: string | null;

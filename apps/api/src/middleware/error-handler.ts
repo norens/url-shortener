@@ -1,9 +1,13 @@
 import type { Context } from "hono";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { AppError, RateLimitError } from "../errors";
 
 export function errorHandler(err: Error, c: Context) {
   if (err instanceof RateLimitError) {
-    const res = c.json({ error: err.message }, err.statusCode as any);
+    const res = c.json(
+      { error: err.message },
+      err.statusCode as ContentfulStatusCode,
+    );
     if (err.retryAfter) {
       res.headers.set("Retry-After", String(err.retryAfter));
     }
@@ -11,7 +15,10 @@ export function errorHandler(err: Error, c: Context) {
   }
 
   if (err instanceof AppError) {
-    return c.json({ error: err.message }, err.statusCode as any);
+    return c.json(
+      { error: err.message },
+      err.statusCode as ContentfulStatusCode,
+    );
   }
 
   // Unknown errors — don't leak internals

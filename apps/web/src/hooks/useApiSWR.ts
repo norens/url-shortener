@@ -1,7 +1,7 @@
 "use client";
 
-import useSWR from "swr";
 import type { SWRResponse } from "swr";
+import useSWR from "swr";
 import { apiGet } from "@/lib/api";
 
 export function useApiSWR<T>(path: string | null): SWRResponse<T> {

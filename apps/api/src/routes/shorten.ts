@@ -1,9 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { CF_HEADERS, type Env } from "../types";
 import { createSupabaseClient } from "../lib/supabase";
-import { shortenSchema, anonymousShortenSchema } from "../lib/validation";
-import { createLink, createAnonymousLink } from "../services/link.service";
+import { anonymousShortenSchema, shortenSchema } from "../lib/validation";
+import { createAnonymousLink, createLink } from "../services/link.service";
+import { CF_HEADERS, type Env } from "../types";
 
 const shorten = new Hono<{
   Bindings: Env;
@@ -15,11 +15,20 @@ shorten.post("/api/shorten", zValidator("json", shortenSchema), async (c) => {
   const { long_url, alias, title, expires_at } = c.req.valid("json");
 
   const deps = {
-    supabase: createSupabaseClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY),
+    supabase: createSupabaseClient(
+      c.env.SUPABASE_URL,
+      c.env.SUPABASE_SERVICE_ROLE_KEY,
+    ),
     kv: c.env.URL_CACHE,
   };
 
-  const result = await createLink(deps, { userId, long_url, alias, title, expires_at });
+  const result = await createLink(deps, {
+    userId,
+    long_url,
+    alias,
+    title,
+    expires_at,
+  });
   c.executionCtx.waitUntil(result.cachePromise);
 
   return c.json(
@@ -43,7 +52,10 @@ anonymousShorten.post(
     const { url } = c.req.valid("json");
 
     const deps = {
-      supabase: createSupabaseClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY),
+      supabase: createSupabaseClient(
+        c.env.SUPABASE_URL,
+        c.env.SUPABASE_SERVICE_ROLE_KEY,
+      ),
       kv: c.env.URL_CACHE,
     };
 

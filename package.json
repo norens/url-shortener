@@ -1,6 +1,26 @@
 {
   "name": "qurl",
+  "description": "Open-source URL shortener with analytics, built on Cloudflare Workers and Supabase",
   "private": true,
+  "license": "MIT",
+  "author": "Nazar Fedishin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/norens/url-shortener.git"
+  },
+  "homepage": "https://qurl.nazarf.dev",
+  "bugs": {
+    "url": "https://github.com/norens/url-shortener/issues"
+  },
+  "keywords": [
+    "url-shortener",
+    "link-shortener",
+    "cloudflare-workers",
+    "supabase",
+    "hono",
+    "nextjs",
+    "analytics"
+  ],
   "scripts": {
     "dev:api": "pnpm --filter api dev",
     "dev:web": "pnpm --filter web dev",

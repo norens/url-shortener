@@ -1,4 +1,3 @@
-import type { CachedUrl } from "@qurl/shared";
 import {
   ANONYMOUS_LINK_EXPIRY_DAYS,
   ANONYMOUS_RATE_LIMIT,
@@ -6,7 +5,6 @@ import {
   MAX_COLLISION_RETRIES,
   SHORT_URL_BASE,
 } from "@qurl/shared";
-import type { Deps } from "../types";
 import {
   ConflictError,
   ForbiddenError,
@@ -19,8 +17,9 @@ import {
 import { generateShortCode } from "../lib/codegen";
 import * as cacheRepo from "../repositories/cache.repository";
 import * as profileRepo from "../repositories/profile.repository";
-import * as urlRepo from "../repositories/url.repository";
 import type { ListOptions } from "../repositories/url.repository";
+import * as urlRepo from "../repositories/url.repository";
+import type { Deps } from "../types";
 
 // --- Input types ---
 
@@ -198,10 +197,7 @@ export async function resolveLink(deps: Deps, code: string) {
 
   // 2. Cache miss — query database
   if (!cached) {
-    const { data, error } = await urlRepo.findForRedirect(
-      deps.supabase,
-      code,
-    );
+    const { data, error } = await urlRepo.findForRedirect(deps.supabase, code);
 
     if (error || !data) {
       throw new NotFoundError("Not found");

@@ -3,9 +3,9 @@
 import type { User } from "@supabase/supabase-js";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useApiSWR } from "@/hooks/useApiSWR";
 import { useAuth } from "@/hooks/useAuth";
+import { createClient } from "@/lib/supabase/client";
 
 interface MeResponse {
   plan: string;

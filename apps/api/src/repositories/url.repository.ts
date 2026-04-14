@@ -10,10 +10,7 @@ const ALLOWED_SORT_COLUMNS = [
   "title",
 ] as const;
 
-export async function findForRedirect(
-  supabase: SupabaseClient,
-  code: string,
-) {
+export async function findForRedirect(supabase: SupabaseClient, code: string) {
   return supabase
     .from("urls")
     .select("long_url, expires_at, is_active, user_id")
@@ -32,20 +29,14 @@ export async function findWithOwnership(
     .single();
 }
 
-export async function countByUser(
-  supabase: SupabaseClient,
-  userId: string,
-) {
+export async function countByUser(supabase: SupabaseClient, userId: string) {
   return supabase
     .from("urls")
     .select("*", { count: "exact", head: true })
     .eq("user_id", userId);
 }
 
-export async function codeExists(
-  supabase: SupabaseClient,
-  code: string,
-) {
+export async function codeExists(supabase: SupabaseClient, code: string) {
   const { data } = await supabase
     .from("urls")
     .select("short_code")
