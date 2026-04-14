@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { Heart, Link2, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { QUrlLogo } from "@/components/QUrlLogo";
 
 const navigation = [
   { name: "Links", href: "/links", icon: Link2 },
@@ -16,11 +17,8 @@ export function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 lg:flex">
       <div className="flex h-16 items-center px-6">
-        <Link
-          href="/links"
-          className="text-xl font-bold text-gray-900 dark:text-gray-100"
-        >
-          Qurl
+        <Link href="/links">
+          <QUrlLogo size="md" />
         </Link>
       </div>
       <nav className="flex-1 space-y-1 px-3 py-4">

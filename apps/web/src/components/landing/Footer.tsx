@@ -1,12 +1,11 @@
 import { Heart } from "lucide-react";
+import { QUrlLogo } from "@/components/QUrlLogo";
 
 export function Footer() {
   return (
     <footer className="border-t border-gray-100 dark:border-gray-800">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-3 px-6 py-8 text-sm text-gray-500 dark:text-gray-400 sm:flex-row sm:justify-between">
-        <span className="font-medium text-gray-900 dark:text-gray-100">
-          Qurl
-        </span>
+        <QUrlLogo size="sm" />
         <div className="flex items-center gap-4">
           <a
             href="https://ko-fi.com/nazarfedyshyn"

@@ -5,6 +5,7 @@ import { FeaturesSection } from "@/components/landing/FeaturesSection";
 import { Footer } from "@/components/landing/Footer";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { PricingSection } from "@/components/landing/PricingSection";
+import { QUrlLogo } from "@/components/QUrlLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LandingPage() {
@@ -13,9 +14,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-gray-100 dark:border-gray-800">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            Qurl
-          </span>
+          <QUrlLogo size="md" />
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link

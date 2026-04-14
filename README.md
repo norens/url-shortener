@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="apps/web/public/readme-banner.svg" alt="Qurl" width="100%" />
+</p>
+
 # Qurl
 
 [![CI](https://github.com/norens/url-shortener/actions/workflows/ci.yml/badge.svg)](https://github.com/norens/url-shortener/actions/workflows/ci.yml)

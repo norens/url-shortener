@@ -2,6 +2,7 @@
 
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { QUrlLogo } from "@/components/QUrlLogo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createClient } from "@/lib/supabase/client";
 
@@ -18,9 +19,7 @@ export function Header() {
   return (
     <header className="flex h-16 items-center justify-between border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-6">
       <div className="lg:hidden">
-        <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-          Qurl
-        </span>
+        <QUrlLogo size="md" />
       </div>
       <div className="ml-auto flex items-center gap-2">
         <ThemeToggle />

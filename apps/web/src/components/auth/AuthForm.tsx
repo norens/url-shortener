@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface AuthFormProps {
   title: string;
   subtitle: string;
@@ -28,9 +30,12 @@ export function AuthForm({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          {title}
-        </h1>
+        <div className="flex items-center justify-center gap-2.5 mb-1">
+          <Image src="/logo.svg" alt="" width={36} height={36} />
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            {title}
+          </h1>
+        </div>
         <p className="mt-2 text-gray-600 dark:text-gray-400">{subtitle}</p>
       </div>
 
