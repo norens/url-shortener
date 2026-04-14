@@ -59,38 +59,41 @@ export default function LinkDetailPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/links"
-          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
-        <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {link?.title ?? code}
-            </h1>
-            <span
-              className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                link?.is_active
-                  ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400"
-                  : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-              }`}
-            >
-              {link?.is_active ? "Active" : "Inactive"}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/links"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 sm:text-2xl">
+            {link?.title ?? code}
+          </h1>
+          <span
+            className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+              link?.is_active
+                ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400"
+                : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+            }`}
+          >
+            {link?.is_active ? "Active" : "Inactive"}
+          </span>
+          {link?.expires_at && (
+            <span className="hidden items-center gap-1 rounded-full bg-yellow-100 dark:bg-yellow-950 px-2 py-0.5 text-xs font-medium text-yellow-700 dark:text-yellow-400 sm:inline-flex">
+              <Clock className="h-3 w-3" />
+              Expires{" "}
+              {new Date(link.expires_at).toLocaleDateString("en", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
             </span>
-            {link?.expires_at && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 dark:bg-yellow-950 px-2 py-0.5 text-xs font-medium text-yellow-700 dark:text-yellow-400">
-                <Clock className="h-3 w-3" />
-                Expires{" "}
-                {new Date(link.expires_at).toLocaleDateString("en", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-            )}
+          )}
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
             <button
               type="button"
               onClick={() => copy(shortUrl)}
@@ -101,33 +104,33 @@ export default function LinkDetailPage({
               ) : (
                 <Copy className="h-3.5 w-3.5" />
               )}
-              {shortUrl}
+              <span className="truncate">{shortUrl}</span>
             </button>
-          </div>
-          {link && (
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 truncate max-w-lg">
-              {link.long_url}
-            </p>
-          )}
-        </div>
-        <div className="flex items-center gap-6">
-          {analytics?.period_clicks != null && (
-            <div className="text-right">
-              <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-                {analytics.period_clicks.toLocaleString()}
+            {link && (
+              <p className="mt-1 truncate text-sm text-gray-500 dark:text-gray-400">
+                {link.long_url}
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                period clicks
+            )}
+          </div>
+          <div className="flex items-center gap-6">
+            {analytics?.period_clicks != null && (
+              <div>
+                <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 sm:text-3xl">
+                  {analytics.period_clicks.toLocaleString()}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
+                  period clicks
+                </p>
+              </div>
+            )}
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">
+                {analytics?.total_clicks.toLocaleString() ?? 0}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
+                total clicks
               </p>
             </div>
-          )}
-          <div className="text-right">
-            <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              {analytics?.total_clicks.toLocaleString() ?? 0}
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              total clicks
-            </p>
           </div>
         </div>
       </div>

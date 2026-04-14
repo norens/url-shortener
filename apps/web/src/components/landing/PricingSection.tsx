@@ -25,8 +25,7 @@ export function PricingSection() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
           {/* Free */}
-          <div className="relative overflow-hidden rounded-xl border-2 border-indigo-600 bg-white p-6 dark:border-indigo-400 dark:bg-gray-900">
-            <div className="absolute inset-x-0 top-0 h-1 rounded-t-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600" />
+          <div className="relative rounded-xl border-2 border-indigo-600 bg-white p-6 dark:border-indigo-400 dark:bg-gray-900">
             <span className="absolute -top-3 left-4 rounded-full bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-3 py-0.5 text-xs font-medium text-white">
               Most popular
             </span>
