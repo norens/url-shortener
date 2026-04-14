@@ -16,14 +16,14 @@ const VALID_PERIODS: AnalyticsPeriod[] = [
   "all",
 ];
 
-// --- Private helpers ---
+// --- Helpers (exported for testing) ---
 
 /**
  * Given a requested period and the plan's analytics_retention_days,
  * return the most generous period the plan allows.
  * If retention is -1 (unlimited), the requested period is returned as-is.
  */
-function clampPeriodToPlan(
+export function clampPeriodToPlan(
   requested: AnalyticsPeriod,
   retentionDays: number,
 ): AnalyticsPeriod {
@@ -51,7 +51,7 @@ function clampPeriodToPlan(
  * Compute the "since" Date for a given period.
  * Returns null for 'all' (no lower bound).
  */
-function computeSinceDate(period: AnalyticsPeriod): Date | null {
+export function computeSinceDate(period: AnalyticsPeriod): Date | null {
   const days = PERIOD_DAYS[period];
   if (days === null) return null;
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
@@ -63,7 +63,7 @@ function computeSinceDate(period: AnalyticsPeriod): Date | null {
  * - 7d/30d/90d/365d: daily buckets (format YYYY-MM-DD)
  * - all: daily buckets from the earliest scan to today
  */
-function buildBuckets(
+export function buildBuckets(
   period: AnalyticsPeriod,
   linkCreatedAt: Date,
   scans: { scanned_at: string }[],
