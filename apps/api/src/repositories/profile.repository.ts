@@ -2,7 +2,7 @@ import type { createSupabaseClient } from "../lib/supabase";
 
 type SupabaseClient = ReturnType<typeof createSupabaseClient>;
 
-export async function findById(supabase: SupabaseClient, userId: string) {
+export async function findPlanAndLimit(supabase: SupabaseClient, userId: string) {
   return supabase
     .from("profiles")
     .select("plan, links_limit")

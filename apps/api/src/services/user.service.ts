@@ -4,7 +4,7 @@ import * as urlRepo from "../repositories/url.repository";
 
 export async function getProfile(deps: Deps, userId: string) {
   const [{ data: profile }, { count }] = await Promise.all([
-    profileRepo.findById(deps.supabase, userId),
+    profileRepo.findPlanAndLimit(deps.supabase, userId),
     urlRepo.countByUser(deps.supabase, userId),
   ]);
 

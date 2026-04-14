@@ -1,6 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import type { Env } from "../types";
+import { CF_HEADERS, type Env } from "../types";
 import { createSupabaseClient } from "../lib/supabase";
 import { shortenSchema, anonymousShortenSchema } from "../lib/validation";
 import { createLink, createAnonymousLink } from "../services/link.service";
@@ -48,7 +48,7 @@ anonymousShorten.post(
     };
 
     const ip =
-      c.req.header("cf-connecting-ip") ||
+      c.req.header(CF_HEADERS.CONNECTING_IP) ||
       c.req.header("x-forwarded-for") ||
       "unknown";
 

@@ -75,7 +75,7 @@ export async function createLink(deps: Deps, input: CreateLinkInput) {
   // Check user's link count against limit
   const [{ count }, { data: profile }] = await Promise.all([
     urlRepo.countByUser(deps.supabase, userId),
-    profileRepo.findById(deps.supabase, userId),
+    profileRepo.findPlanAndLimit(deps.supabase, userId),
   ]);
 
   if (profile && count !== null && count >= profile.links_limit) {

@@ -68,11 +68,11 @@ interface RateLimitEntry {
 
 export async function checkRateLimit(
   kv: KVNamespace,
-  userId: string,
+  identifier: string,
   limit: number,
   windowSeconds: number,
 ): Promise<{ allowed: boolean; retryAfter?: number }> {
-  const key = `rl:shorten:${userId}`;
+  const key = `rl:shorten:${identifier}`;
   const now = Date.now();
   const entry = await kv.get<RateLimitEntry>(key, "json");
 
