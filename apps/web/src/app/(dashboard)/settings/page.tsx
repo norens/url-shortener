@@ -2,10 +2,10 @@
 
 import type { User } from "@supabase/supabase-js";
 import { Heart } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { apiGet } from "@/lib/api";
 import { createClient } from "@/lib/supabase/client";
+import { useApiSWR } from "@/hooks/useApiSWR";
+import { useAuth } from "@/hooks/useAuth";
 
 interface MeResponse {
   plan: string;
@@ -15,24 +15,15 @@ interface MeResponse {
 
 export default function SettingsPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [me, setMe] = useState<MeResponse | null>(null);
+  const { data: me } = useApiSWR<MeResponse>("/api/me");
+  const { signOut } = useAuth();
   const supabase = createClient();
-  const router = useRouter();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
     });
-    apiGet<MeResponse>("/api/me")
-      .then(setMe)
-      .catch(() => {});
-  }, [supabase.auth.getUser]);
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
-  }
+  }, [supabase.auth]);
 
   const linksCount = me?.links_count ?? 0;
   const linksLimit = me?.links_limit ?? 20;
@@ -128,7 +119,7 @@ export default function SettingsPage() {
         <div className="mt-4">
           <button
             type="button"
-            onClick={handleLogout}
+            onClick={signOut}
             className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-950"
           >
             Sign out

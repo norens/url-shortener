@@ -3,10 +3,10 @@
 import type { LinkWithClicks, PaginatedResponse } from "@qurl/shared";
 import { BarChart3, Check, Copy } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useState } from "react";
-import useSWR from "swr";
+import { useState } from "react";
 import { CreateLinkDialog } from "@/components/CreateLinkDialog";
-import { apiGet } from "@/lib/api";
+import { useApiSWR } from "@/hooks/useApiSWR";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 const SHORT_URL_BASE =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8787";
@@ -14,18 +14,11 @@ const SHORT_URL_BASE =
 export default function LinksPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const { copied, copy } = useCopyToClipboard();
 
-  const { data, mutate, isLoading } = useSWR(
-    `/api/links?page=${page}&per_page=20&search=${search}`,
-    (url: string) => apiGet<PaginatedResponse<LinkWithClicks>>(url),
-  );
-
-  const handleCopy = useCallback(async (shortCode: string) => {
-    await navigator.clipboard.writeText(`${SHORT_URL_BASE}/${shortCode}`);
-    setCopiedCode(shortCode);
-    setTimeout(() => setCopiedCode(null), 2000);
-  }, []);
+  const { data, mutate, isLoading } = useApiSWR<
+    PaginatedResponse<LinkWithClicks>
+  >(`/api/links?page=${page}&per_page=20&search=${search}`);
 
   return (
     <div className="space-y-6">
@@ -91,63 +84,66 @@ export default function LinksPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-              {data.data.map((link) => (
-                <tr
-                  key={link.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                >
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                        {link.short_code}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleCopy(link.short_code)}
-                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        title="Copy short URL"
+              {data.data.map((link) => {
+                const shortUrl = `${SHORT_URL_BASE}/${link.short_code}`;
+                return (
+                  <tr
+                    key={link.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                          {link.short_code}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => copy(shortUrl)}
+                          className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                          title="Copy short URL"
+                        >
+                          {copied === shortUrl ? (
+                            <Check className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <Copy className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
+                      {link.title && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {link.title}
+                        </p>
+                      )}
+                    </td>
+                    <td className="max-w-xs truncate px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                      {link.long_url}
+                    </td>
+                    <td className="px-4 py-3 text-center text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {link.total_clicks.toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <span
+                        className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                          link.is_active
+                            ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400"
+                            : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                        }`}
                       >
-                        {copiedCode === link.short_code ? (
-                          <Check className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <Copy className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
-                    {link.title && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {link.title}
-                      </p>
-                    )}
-                  </td>
-                  <td className="max-w-xs truncate px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
-                    {link.long_url}
-                  </td>
-                  <td className="px-4 py-3 text-center text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {link.total_clicks.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <span
-                      className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                        link.is_active
-                          ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400"
-                          : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                      }`}
-                    >
-                      {link.is_active ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <Link
-                      href={`/links/${link.short_code}`}
-                      className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      <BarChart3 className="h-4 w-4" />
-                      Details
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+                        {link.is_active ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <Link
+                        href={`/links/${link.short_code}`}
+                        className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        <BarChart3 className="h-4 w-4" />
+                        Details
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

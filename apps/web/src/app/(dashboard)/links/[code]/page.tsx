@@ -3,15 +3,15 @@
 import type { AnalyticsResponse, LinkWithClicks } from "@qurl/shared";
 import { ArrowLeft, Check, Clock, Copy } from "lucide-react";
 import Link from "next/link";
-import { use, useCallback, useState } from "react";
-import useSWR from "swr";
+import { use, useState } from "react";
 import { ClicksChart } from "@/components/analytics/ClicksChart";
 import { CountryList } from "@/components/analytics/CountryList";
 import { DeviceBreakdown } from "@/components/analytics/DeviceBreakdown";
 import { PeriodSelector } from "@/components/analytics/PeriodSelector";
 import { RecentScans } from "@/components/analytics/RecentScans";
 import { EditLinkForm } from "@/components/EditLinkForm";
-import { apiGet } from "@/lib/api";
+import { useApiSWR } from "@/hooks/useApiSWR";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 const SHORT_URL_BASE =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8787";
@@ -22,29 +22,22 @@ export default function LinkDetailPage({
   params: Promise<{ code: string }>;
 }) {
   const { code } = use(params);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const [period, setPeriod] = useState("7d");
+
+  const shortUrl = `${SHORT_URL_BASE}/${code}`;
 
   const {
     data: analytics,
     isLoading: analyticsLoading,
     mutate: mutateAnalytics,
-  } = useSWR(`/api/analytics/${code}?period=${period}`, (url: string) =>
-    apiGet<AnalyticsResponse>(url),
-  );
+  } = useApiSWR<AnalyticsResponse>(`/api/analytics/${code}?period=${period}`);
 
-  const { data: linksData, mutate: mutateLinks } = useSWR(
-    `/api/links?search=${code}&per_page=1`,
-    (url: string) => apiGet<{ data: LinkWithClicks[] }>(url),
-  );
+  const { data: linksData, mutate: mutateLinks } = useApiSWR<{
+    data: LinkWithClicks[];
+  }>(`/api/links?search=${code}&per_page=1`);
 
   const link = linksData?.data?.[0];
-
-  const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(`${SHORT_URL_BASE}/${code}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [code]);
 
   function handleUpdated() {
     mutateAnalytics();
@@ -100,15 +93,15 @@ export default function LinkDetailPage({
             )}
             <button
               type="button"
-              onClick={handleCopy}
+              onClick={() => copy(shortUrl)}
               className="flex items-center gap-1 rounded-md bg-gray-100 dark:bg-gray-800 px-2.5 py-1 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
             >
-              {copied ? (
+              {copied === shortUrl ? (
                 <Check className="h-3.5 w-3.5 text-green-500" />
               ) : (
                 <Copy className="h-3.5 w-3.5" />
               )}
-              {SHORT_URL_BASE}/{code}
+              {shortUrl}
             </button>
           </div>
           {link && (
