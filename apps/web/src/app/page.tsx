@@ -14,7 +14,9 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-gray-100 dark:border-gray-800">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <QUrlLogo size="md" />
+          <Link href="/">
+            <QUrlLogo size="md" />
+          </Link>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link
