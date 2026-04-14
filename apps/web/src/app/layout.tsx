@@ -9,6 +9,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://qurl.nazarf.dev"),
   title: "Qurl — URL Shortener",
   description:
     "Shorten links and track clicks with powerful analytics. Free URL shortener with real-time statistics.",
