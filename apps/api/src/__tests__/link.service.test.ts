@@ -28,10 +28,10 @@ vi.mock("../lib/codegen", () => ({
   generateShortCode: () => "abc1234",
 }));
 
+import { GoneError, NotFoundError } from "../errors";
 import * as cacheRepo from "../repositories/cache.repository";
 import * as urlRepo from "../repositories/url.repository";
 import { resolveLink } from "../services/link.service";
-import { GoneError, NotFoundError } from "../errors";
 import type { Deps } from "../types";
 
 const mockDeps: Deps = {
