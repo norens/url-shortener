@@ -1,6 +1,6 @@
 import { env } from "cloudflare:test";
 import { beforeEach, describe, expect, it } from "vitest";
-import { checkRateLimit } from "../lib/ratelimit";
+import { checkRateLimit } from "../repositories/cache.repository";
 
 describe("checkRateLimit", () => {
   const TEST_USER = "test-user-ratelimit";
