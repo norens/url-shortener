@@ -6,6 +6,7 @@ import { errorHandler } from "./middleware/error-handler";
 import analytics from "./routes/analytics";
 import links from "./routes/links";
 import me from "./routes/me";
+import qr from "./routes/qr";
 import redirect from "./routes/redirect";
 import resolve from "./routes/resolve";
 import shorten, { anonymousShorten } from "./routes/shorten";
@@ -41,6 +42,7 @@ app.use("/api/me", authMiddleware);
 
 // Public routes (no auth)
 app.route("/", anonymousShorten);
+app.route("/", qr);
 
 // Authenticated routes
 app.route("/", shorten);
