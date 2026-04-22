@@ -159,4 +159,7 @@ export interface QrConfig {
 }
 
 /** Input shape for upserting a QR config (no PK or timestamps). */
-export type QrConfigInput = Omit<QrConfig, "short_code" | "created_at" | "updated_at">;
+export type QrConfigInput = Omit<
+  QrConfig,
+  "short_code" | "created_at" | "updated_at"
+>;
