@@ -33,6 +33,7 @@ export interface UrlScan {
   user_agent: string | null;
   referer: string | null;
   device_type: "mobile" | "desktop" | "tablet" | "unknown";
+  source?: QrSource;
 }
 
 // API Request types
@@ -97,3 +98,65 @@ export interface CachedUrl {
   is_active: boolean;
   user_id: string | null;
 }
+
+// ----------------------------------------------------------------
+// QR Code types
+// ----------------------------------------------------------------
+
+/** Source channel of a scan/click. null = direct, 'qr' = scanned QR. */
+export type QrSource = "qr" | null;
+
+export type QrDotsStyle =
+  | "square"
+  | "rounded"
+  | "dots"
+  | "classy"
+  | "classy-rounded"
+  | "extra-rounded";
+
+export type QrCornersStyle =
+  | "square"
+  | "rounded"
+  | "dot"
+  | "extra-rounded"
+  | "inpoint"
+  | "outpoint";
+
+export type QrErrorCorrection = "L" | "M" | "Q" | "H";
+
+export interface QrGradient {
+  type: "linear" | "radial";
+  rotation?: number; // degrees
+  stops: { offset: number; color: string }[];
+}
+
+export interface QrFrameConfig {
+  style: "none" | "box" | "tooltip" | "banner" | "ribbon";
+  text?: string;
+  textColor?: string;
+  fgColor?: string;
+  bgColor?: string;
+  fontFamily?: string;
+  borderRadius?: number;
+}
+
+/** Row shape of the qr_configs table (mirrors migration 005). */
+export interface QrConfig {
+  short_code: string;
+  fg_color: string | null;
+  bg_color: string | null;
+  logo_url: string | null;
+  dots_style: QrDotsStyle | null;
+  corners_style: QrCornersStyle | null;
+  corners_dot_style: QrCornersStyle | null;
+  gradient: QrGradient | null;
+  frame_config: QrFrameConfig | null;
+  ecc: QrErrorCorrection | null;
+  preset_id: string | null;
+  size_px: number;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Input shape for upserting a QR config (no PK or timestamps). */
+export type QrConfigInput = Omit<QrConfig, "short_code" | "created_at" | "updated_at">;
