@@ -5,6 +5,7 @@ import { BarChart3, Check, Copy } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { CreateLinkDialog } from "@/components/CreateLinkDialog";
+import { DownloadQrButton } from "@/components/links/DownloadQrButton";
 import { useApiSWR } from "@/hooks/useApiSWR";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
@@ -92,6 +93,7 @@ export default function LinksPage() {
                           <Copy className="h-4 w-4" />
                         )}
                       </button>
+                      <DownloadQrButton shortCode={link.short_code} />
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -193,13 +195,16 @@ export default function LinksPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <Link
-                          href={`/links/${link.short_code}`}
-                          className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
-                        >
-                          <BarChart3 className="h-4 w-4" />
-                          Details
-                        </Link>
+                        <div className="inline-flex items-center gap-3">
+                          <DownloadQrButton shortCode={link.short_code} />
+                          <Link
+                            href={`/links/${link.short_code}`}
+                            className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          >
+                            <BarChart3 className="h-4 w-4" />
+                            Details
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   );

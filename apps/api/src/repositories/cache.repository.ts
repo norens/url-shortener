@@ -66,13 +66,12 @@ interface RateLimitEntry {
   expiresAt: number;
 }
 
-export async function checkRateLimit(
+async function checkRateLimitByKey(
   kv: KVNamespace,
-  identifier: string,
+  key: string,
   limit: number,
   windowSeconds: number,
 ): Promise<{ allowed: boolean; retryAfter?: number }> {
-  const key = `rl:shorten:${identifier}`;
   const now = Date.now();
   const entry = await kv.get<RateLimitEntry>(key, "json");
 
@@ -100,4 +99,32 @@ export async function checkRateLimit(
   });
 
   return { allowed: true };
+}
+
+export async function checkRateLimit(
+  kv: KVNamespace,
+  identifier: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<{ allowed: boolean; retryAfter?: number }> {
+  return checkRateLimitByKey(
+    kv,
+    `rl:shorten:${identifier}`,
+    limit,
+    windowSeconds,
+  );
+}
+
+export async function checkQrRateLimit(
+  kv: KVNamespace,
+  identifier: string,
+  limit: number,
+  windowSeconds: number,
+): Promise<{ allowed: boolean; retryAfter?: number }> {
+  return checkRateLimitByKey(
+    kv,
+    `rl:qr-svg:${identifier}`,
+    limit,
+    windowSeconds,
+  );
 }

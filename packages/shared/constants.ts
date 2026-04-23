@@ -1,4 +1,4 @@
-import type { AnalyticsPeriod } from "./types";
+import type { AnalyticsPeriod, QrConfigInput } from "./types";
 
 export const BASE62_ALPHABET =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -42,3 +42,28 @@ export const PERIOD_DAYS: Record<AnalyticsPeriod, number | null> = {
   "365d": 365,
   all: null,
 };
+
+/** Default QR styling when no config row exists for a link. */
+export const DEFAULT_QR_CONFIG: QrConfigInput = {
+  fg_color: "#0F172A",
+  bg_color: "#FFFFFF",
+  logo_url: null,
+  dots_style: "square", // Week 1 ships square-dot only; other styles land in Week 2
+  corners_style: "square",
+  corners_dot_style: "square",
+  gradient: null,
+  frame_config: null,
+  ecc: "M",
+  preset_id: null,
+  size_px: 512,
+};
+
+/** KV cache TTL for server-rendered QR SVGs. */
+export const QR_CACHE_TTL_SECONDS = 3600;
+
+/** URL parameter appended to QR-encoded short URLs so the redirect handler can tag scans. */
+export const QR_SOURCE_PARAM = "qrs";
+export const QR_SOURCE_VALUE = "1";
+
+/** Helper that builds the API route for a link's server-rendered SVG. */
+export const qrSvgRoute = (shortCode: string) => `/api/qr/${shortCode}.svg`;
